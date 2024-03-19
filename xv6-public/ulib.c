@@ -1,8 +1,10 @@
+
 #include "types.h"
 #include "stat.h"
 #include "fcntl.h"
 #include "user.h"
 #include "x86.h"
+#include "memlayout.h" //added
 
 char*
 strcpy(char *s, const char *t)
@@ -104,3 +106,29 @@ memmove(void *vdst, const void *vsrc, int n)
     *dst++ = *src++;
   return vdst;
 }
+
+//init mutex lock
+void 
+minit(mutex* m){
+  m -> locked = 0;
+  m -> name = "mutex";
+  m -> pid = 0;
+}
+
+//acquire mutex
+void 
+macquire(mutex* m){
+  while (m->locked) {
+    sleep(1000000, m); //proc sleeping for 1 second (1 mil ticks)
+  }
+  m->locked = 1;
+  m->pid = getpid(); //current proc id
+}
+
+//release mutex
+void 
+mrelease(mutex* m){
+  m->locked = 0;
+  m->pid = 0;
+}
+

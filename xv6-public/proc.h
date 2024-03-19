@@ -1,5 +1,4 @@
-#ifndef PROC
-#define PROC
+
 
 #define MAXPROCNAMELEN 16
 #include "spinlock.h"
@@ -57,6 +56,7 @@ struct proc {
   char name[MAXPROCNAMELEN];               // Process name (debugging)
   int nclone;                  // Number of clone calls on this proc (for grading)
   int sleepticks;              // Number of ticks left the process should sleep for
+  int nice; //nice value of proc
 };
 typedef struct {
   struct spinlock lock;
@@ -68,5 +68,3 @@ typedef struct {
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
-
-#endif

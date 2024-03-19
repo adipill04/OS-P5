@@ -1,3 +1,6 @@
+#ifndef DEFS_H
+#define DEFS_H
+
 struct buf;
 struct context;
 struct file;
@@ -193,3 +196,4 @@ void            clearpteu(pde_t *pgdir, char *uva);
 
 // For grading
 void log_sched(struct proc* p);
+#endif

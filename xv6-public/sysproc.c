@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+//#include "user.h"
 
 int
 sys_fork(void)
@@ -103,4 +104,22 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+//nice system call
+int 
+sys_nice(void){
+  int inc;
+  int curr = myproc() -> nice;
+  argint(0, &inc);
+  if(inc + curr > 19){
+    myproc() -> nice = 19;
+  }
+  else if(inc + curr < -20){
+    myproc() -> nice = -20;
+  }
+  else{
+    myproc() -> nice += curr;
+  }
+  return 0;
 }
