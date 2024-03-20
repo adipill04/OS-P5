@@ -124,7 +124,7 @@ int sys_nice(void)
 }
 
 int sys_macquire(void){
-  struct sleeplock *userLock, *kernelLock;
+  struct sleeplock * userLock, * kernelLock;
   argint(0, (int *)&userLock);
   kernelLock = (struct sleeplock *)kalloc();
   if (kernelLock == 0)
@@ -149,22 +149,22 @@ int sys_macquire(void){
 }
 
 int sys_mrelease(void){
-  struct sleeplock userLock, *kernelLock;
+  struct sleeplock *userLock, *kernelLock;
   argint(0, (int *)&userLock);
   kernelLock = (struct sleeplock *)kalloc();
   if (kernelLock == 0)
   {
     return 1;
   }
-  memmove(kernelLock, &userLock, sizeof(struct sleeplock));
+  memmove(kernelLock, userLock, sizeof(struct sleeplock));
 
   acquire(&kernelLock->lk);
   kernelLock -> locked = 0;
   kernelLock -> pid = 0;
-  wakeup(&userLock);
+  wakeup(userLock);
   release(&kernelLock->lk);
 
-  copyout(myproc()->pgdir, (uint)&userLock, (char*)kernelLock, sizeof(struct sleeplock));
+  copyout(myproc()->pgdir, (uint)userLock, (char*)kernelLock, sizeof(struct sleeplock));
   kfree((char*)kernelLock);
   return 0;
 }
