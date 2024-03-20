@@ -34,7 +34,7 @@ int chdir(const char *);
 int dup(int);
 int getpid(void);
 char *sbrk(int);
-int sleep(int, mutex*); //edited mutex in as second parameter
+int sleep(int); //edited mutex in as second parameter
 int uptime(void);
 int clone(void (*)(void *), void *, void *);
 int nice(int); //new sys call

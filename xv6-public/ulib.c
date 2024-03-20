@@ -119,7 +119,7 @@ minit(mutex* m){
 void 
 macquire(mutex* m){
   while (m->locked) {
-    sleep(1000000, m); //proc sleeping for 1 second (1 mil ticks)
+    sleep(1000000); //FIX: need to permanently put to sleep
   }
   m->locked = 1;
   m->pid = getpid(); //current proc id
