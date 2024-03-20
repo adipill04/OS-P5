@@ -414,14 +414,14 @@ scheduler(void)
       if(p == &ptable.proc[NPROC]){
         p = ptable.proc;
       }
-      if(p == index){
-        break;
-      }
       if(p->state != RUNNABLE)
         continue;
       if(p -> nice < min){
         index = p;
         min = p -> nice;
+      }
+      if(p == index){
+        break;
       }
     }
       // Switch to chosen process.  It is the process's job

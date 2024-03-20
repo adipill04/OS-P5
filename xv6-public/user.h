@@ -1,11 +1,14 @@
 #ifndef USER_H
 #define USER_H
 #include "defs.h"
+#include "spinlock.h"
+
 
 struct stat;
 struct rtcdate;
 typedef struct
 {
+    struct spinlock lk; // spinlock protecting this sleep lock
     // Lock state, ownership, etc.
     uint locked; // 0 - free/1 - held
     char *name;  // Name of lock. (debugging, no use prob)
@@ -37,7 +40,9 @@ char *sbrk(int);
 int sleep(int); //edited mutex in as second parameter
 int uptime(void);
 int clone(void (*)(void *), void *, void *);
-int nice(int); //new sys call
+int nice(int); //new sys call--& below
+void macquire(mutex *);
+void mrelease(mutex *);
 
 // ulib.c
 int stat(const char *, struct stat *);
@@ -53,6 +58,5 @@ void *malloc(uint);
 void free(void *);
 int atoi(const char *);
 void minit(mutex *); // added & below
-void macquire(mutex *);
-void mrelease(mutex *);
+
 #endif
