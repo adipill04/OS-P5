@@ -123,47 +123,25 @@ int sys_nice(void)
 }
 
 int sys_macquire(void){
-  struct sleeplock * userLock, * kernelLock;
-  argint(0, (int *)&userLock);
-  kernelLock = (struct sleeplock *)kalloc();
-  if (kernelLock == 0)
-  {
-    return 1;
+  struct sleeplock * userLock;
+  argint(0, &userLock);
+  acquire(&userLock->lk);
+  while (userLock->locked) {
+    sleep(userLock, &userLock->lk);
   }
-  memmove(kernelLock, userLock, sizeof(struct sleeplock));
-
-  acquire(&kernelLock->lk);
-  while (kernelLock->locked)
-  {
-    sleep(userLock, &kernelLock->lk);
-  }
-  kernelLock->locked = 1;
-  kernelLock->pid = myproc()->pid;
-  release(&kernelLock->lk);
-
-  copyout(myproc()->pgdir, (uint)userLock, (char *)kernelLock, sizeof(struct sleeplock));
-  kfree((char *)kernelLock);
-
+  userLock->locked = 1;
+  userLock->pid = myproc()->pid;
+  release(&userLock->lk);
   return 0;
 }
 
 int sys_mrelease(void){
-  struct sleeplock *userLock, *kernelLock;
-  argint(0, (int *)&userLock);
-  kernelLock = (struct sleeplock *)kalloc();
-  if (kernelLock == 0)
-  {
-    return 1;
-  }
-  memmove(kernelLock, userLock, sizeof(struct sleeplock));
-
-  acquire(&kernelLock->lk);
-  kernelLock -> locked = 0;
-  kernelLock -> pid = 0;
+  struct sleeplock * userLock;
+  argint(0, &userLock);
+  acquire(&userLock->lk);
+  userLock->lk.locked = 0;
+  userLock->pid = 0;
   wakeup(userLock);
-  release(&kernelLock->lk);
-
-  copyout(myproc()->pgdir, (uint)userLock, (char*)kernelLock, sizeof(struct sleeplock));
-  kfree((char*)kernelLock);
+  release(&userLock->lk);
   return 0;
 }
