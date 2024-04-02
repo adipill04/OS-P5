@@ -60,69 +60,22 @@ objdump -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel.sym
 dd if=/dev/zero of=xv6.img count=10000
 10000+0 records in
 10000+0 records out
-5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.00958575 s, 534 MB/s
+5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.027019 s, 189 MB/s
 dd if=bootblock of=xv6.img conv=notrunc
 1+0 records in
 1+0 records out
-512 bytes copied, 4.4685e-05 s, 11.5 MB/s
+512 bytes copied, 0.00064364 s, 795 kB/s
 dd if=kernel of=xv6.img seek=1 conv=notrunc
-414+1 records in
-414+1 records out
-212348 bytes (212 kB, 207 KiB) copied, 0.000264342 s, 803 MB/s
+415+1 records in
+415+1 records out
+212540 bytes (213 kB, 208 KiB) copied, 0.000504326 s, 421 MB/s
 gcc -Werror -Wall -o mkfs mkfs.c
 gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie   -c -o ulib.o ulib.c
-In file included from ulib.c:5:
-user.h:21:5: error: conflicting types for ‘exit’; have ‘int(void)’
-   21 | int exit(void) __attribute__((noreturn));
-      |     ^~~~
-In file included from user.h:3,
-                 from ulib.c:5:
-defs.h:110:17: note: previous declaration of ‘exit’ with type ‘void(void)’
-  110 | void            exit(void);
-      |                 ^~~~
-In file included from ulib.c:5:
-user.h:40:5: error: conflicting types for ‘sleep’; have ‘int(int)’
-   40 | int sleep(int); //edited mutex in as second parameter
-      |     ^~~~~
-In file included from user.h:3,
-                 from ulib.c:5:
-defs.h:122:17: note: previous declaration of ‘sleep’ with type ‘void(void *, struct spinlock *)’
-  122 | void            sleep(void*, struct spinlock*);
-      |                 ^~~~~
-In file included from ulib.c:5:
-user.h:50:7: error: conflicting types for ‘memmove’; have ‘void *(void *, const void *, int)’
-   50 | void *memmove(void *, const void *, int);
-      |       ^~~~~~~
-In file included from user.h:3,
-                 from ulib.c:5:
-defs.h:149:17: note: previous declaration of ‘memmove’ with type ‘void *(void *, const void *, uint)’ {aka ‘void *(void *, const void *, unsigned int)’}
-  149 | void*           memmove(void*, const void*, uint);
-      |                 ^~~~~~~
-In file included from ulib.c:5:
-user.h:55:6: error: conflicting types for ‘strlen’; have ‘uint(const char *)’ {aka ‘unsigned int(const char *)’}
-   55 | uint strlen(const char *);
-      |      ^~~~~~
-In file included from user.h:3,
-                 from ulib.c:5:
-defs.h:152:17: note: previous declaration of ‘strlen’ with type ‘int(const char *)’
-  152 | int             strlen(const char*);
-      |                 ^~~~~~
-ulib.c:29:1: error: conflicting types for ‘strlen’; have ‘uint(const char *)’ {aka ‘unsigned int(const char *)’}
-   29 | strlen(const char *s)
-      | ^~~~~~
-In file included from user.h:3,
-                 from ulib.c:5:
-defs.h:152:17: note: previous declaration of ‘strlen’ with type ‘int(const char *)’
-  152 | int             strlen(const char*);
-      |                 ^~~~~~
-ulib.c:98:1: error: conflicting types for ‘memmove’; have ‘void *(void *, const void *, int)’
-   98 | memmove(void *vdst, const void *vsrc, int n)
-      | ^~~~~~~
-In file included from user.h:3,
-                 from ulib.c:5:
-defs.h:149:17: note: previous declaration of ‘memmove’ with type ‘void *(void *, const void *, uint)’ {aka ‘void *(void *, const void *, unsigned int)’}
-  149 | void*           memmove(void*, const void*, uint);
-      |                 ^~~~~~~
+ulib.c: In function ‘minit’:
+ulib.c:113:3: error: implicit declaration of function ‘initlock’ [-Werror=implicit-function-declaration]
+  113 |   initlock(&m->lk, "sleep lock");
+      |   ^~~~~~~~
+cc1: all warnings being treated as errors
 make: *** [<builtin>: ulib.o] Error 1
 
 

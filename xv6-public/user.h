@@ -1,6 +1,3 @@
-#ifndef USER_H
-#define USER_H
-#include "defs.h"
 #include "spinlock.h"
 
 
@@ -8,7 +5,7 @@ struct stat;
 struct rtcdate;
 typedef struct
 {
-    struct spinlock lk; // spinlock protecting this sleep lock
+    struct spinlock lk;
     // Lock state, ownership, etc.
     uint locked; // 0 - free/1 - held
     char *name;  // Name of lock. (debugging, no use prob)
@@ -58,5 +55,4 @@ void *malloc(uint);
 void free(void *);
 int atoi(const char *);
 void minit(mutex *); // added & below
-
-#endif
+//update with helper functions

@@ -4,6 +4,7 @@
 #include "fcntl.h"
 #include "user.h"
 #include "x86.h"
+#include "spinlock.h"
 //#include "memlayout.h" //added
 
 char*
@@ -110,7 +111,9 @@ memmove(void *vdst, const void *vsrc, int n)
 //init mutex lock
 void 
 minit(mutex* m){
-  initlock(&m->lk, "sleep lock");
+  m->lk.name = "mutex";
+  m->lk.locked = 0;
+  m->lk.cpu = 0;
   m -> locked = 0;
   m -> name = "mutex";
   m -> pid = 0;
