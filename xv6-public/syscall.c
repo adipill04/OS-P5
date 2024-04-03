@@ -132,8 +132,8 @@ static int (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_clone]   sys_clone,
 [SYS_nice]    sys_nice,
-[SYS_macq]    sys_macquire,
-[SYS_mrel]    sys_mrelease,
+[SYS_macquire]    sys_macquire,
+[SYS_mrelease]    sys_mrelease,
 };
 
 void

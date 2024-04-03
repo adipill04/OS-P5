@@ -68,3 +68,5 @@ typedef struct {
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
+
+Ptable getptable();

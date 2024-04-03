@@ -410,7 +410,7 @@ scheduler(void)
       index = ptable.proc;
       bit = 1;
     }
-    for(p = index + sizeof(struct proc*); p <= &ptable.proc[NPROC]; p++){
+    for(p = index + 1; p <= &ptable.proc[NPROC]; p++){ 
       if(p == &ptable.proc[NPROC]){
         p = ptable.proc;
       }
@@ -439,9 +439,9 @@ scheduler(void)
       c->proc = 0;
       min = 20;
     release(&ptable.lock);
-
   }
 }
+
 
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
@@ -508,7 +508,6 @@ sleep(void *chan, struct spinlock *lk)
   struct proc *p = myproc();
   
   if(p == 0)
-    panic("sleep");
 
   if(lk == 0)
     panic("sleep without lk");
@@ -630,4 +629,9 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+//added
+Ptable getptable(){
+  return ptable;
 }

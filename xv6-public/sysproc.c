@@ -7,6 +7,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "sleeplock.h"
+#include "mutex.h"
 
 int sys_fork(void)
 {
@@ -117,16 +118,34 @@ int sys_nice(void)
   }
   else
   {
-    myproc()->nice += curr;
+    myproc()->nice += inc;
   }
   return 0;
 }
 
 int sys_macquire(void){
-  struct sleeplock * userLock;
-  argint(0, &userLock);
+  //int pastPid; uncomment!!!
+  // start
+  mutex *userLock;
+  argptr(0, (void *)&userLock, sizeof(mutex *));
   acquire(&userLock->lk);
+  // end
   while (userLock->locked) {
+    // struct proc *lowerProc;
+    // pastPid = userLock->pid;
+    // Ptable ptable = getptable();
+
+    // if(pastPid > myproc()->pid){
+    //   //find lower priority process holding lock
+    //   for(lowerProc = ptable.proc; lowerProc < &ptable.proc[NPROC]; lowerProc++){
+    //     if(lowerProc->pid == pastPid){
+    //       break;
+    //     }
+    //   }
+      
+
+
+    // }
     sleep(userLock, &userLock->lk);
   }
   userLock->locked = 1;
@@ -136,8 +155,8 @@ int sys_macquire(void){
 }
 
 int sys_mrelease(void){
-  struct sleeplock * userLock;
-  argint(0, &userLock);
+  mutex *userLock;
+  argptr(0, (void *)&userLock, sizeof(mutex *));
   acquire(&userLock->lk);
   userLock->lk.locked = 0;
   userLock->pid = 0;

@@ -1,22 +1,13 @@
 #include "spinlock.h"
+#include "mutex.h"
 
 
 struct stat;
 struct rtcdate;
-typedef struct
-{
-    struct spinlock lk;
-    // Lock state, ownership, etc.
-    uint locked; // 0 - free/1 - held
-    char *name;  // Name of lock. (debugging, no use prob)
-    int pid;     // Process holding lock
-} mutex;
 
 // system calls
 int fork(void);
-#ifndef USE_DEFS_EXIT
 int exit(void) __attribute__((noreturn));
-#endif
 int wait(void);
 int pipe(int *);
 int write(int, const void *, int);
